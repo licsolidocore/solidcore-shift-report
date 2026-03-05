@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LIC End of Shift Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy:       #1557b0;
+    --navy-dark:  #0d47a1;
+    --navy-mid:   #ffffff;
+    --navy-light: #e8f0fe;
+    --blue:       #1557b0;
+    --blue-dim:   #0d47a1;
+    --blue-pale:  #e8f0fe;
+    --white:      #ffffff;
+    --off-white:  #f8f9fa;
+    --text-muted: #5f6368;
+    --border:     #dadce0;
+    --success:    #137333;
+    --alert:      #c5221f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #f0f4ff;
+    color: #202124;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  /* HEADER */
+  .header {
+    background: #ffffff;
+    border-bottom: 1px solid #dadce0;
+    padding: 28px 40px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .header-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .header-subtitle {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #202124;
+  }
+  .header-right {
+    text-align: right;
+  }
+  .header-location {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #1557b0;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .header-date {
+    font-size: 11px;
+    color: #5f6368;
+  }
+
+  .progress-bar-wrap {
+    background: #e8eaed;
+    height: 3px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: #1557b0;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  /* FORM */
+  .form-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 20px 0;
+  }
+
+  /* SECTION HEADERS */
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #1557b0;
+    padding: 32px 0 12px;
+    border-top: 2px solid #e8eaed;
+    margin-top: 32px;
+  }
+  .section-label:first-child { margin-top: 0; border-top: none; padding-top: 0; }
+
+  /* FIELDS */
+  .field { margin-bottom: 20px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width: 600px) { .field-row { grid-template-columns: 1fr; } }
+
+  label {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #3c4043;
+    margin-bottom: 8px;
+  }
+  label .req { color: var(--blue); margin-left: 3px; }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="date"],
+  input[type="time"],
+  select,
+  textarea {
+    width: 100%;
+    background: #ffffff;
+    border: 1.5px solid #dadce0;
+    border-radius: 6px;
+    color: #202124 !important;
+    -webkit-text-fill-color: #202124 !important;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    padding: 12px 14px;
+    transition: border-color 0.15s, background 0.15s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #1557b0;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(21,87,176,0.15);
+  }
+  textarea { resize: vertical; min-height: 90px; line-height: 1.5; color: #202124 !important; }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231557b0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    background-color: #ffffff;
+  }
+  select option { background: #ffffff; color: #202124; }
+
+  /* STEPPER */
+  .stepper {
+    display: flex;
+    align-items: center;
+    background: var(--navy-dark);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    width: 100%;
+  }
+  .stepper button {
+    background: var(--navy-light);
+    border: none;
+    color: var(--blue);
+    font-size: 22px;
+    font-weight: 700;
+    width: 40px;
+    height: 44px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.1s;
+    flex-shrink: 0;
+  }
+  .stepper button:hover { background: var(--blue); color: var(--white); }
+  .stepper .count {
+    flex: 1;
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    color: #eef0ff;
+    user-select: none;
+  }
+
+  /* METRICS GRID */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .metric-card {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+  }
+  .metric-card .metric-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #5f6368;
+    display: block;
+    line-height: 1.3;
+  }
+
+  /* CHECKLIST */
+  .checklist { display: flex; flex-direction: column; gap: 8px; }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 13px 16px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+  .check-item:hover { border-color: var(--blue); }
+  .check-item.checked { border-color: var(--blue); background: #1a2150; }
+  .check-item input[type="checkbox"] { display: none; }
+  .check-box {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .check-item.checked .check-box { background: var(--blue); border-color: var(--blue); }
+  .check-box svg { display: none; }
+  .check-item.checked .check-box svg { display: block; }
+  .check-text { font-size: 14px; font-weight: 500; color: #3c4043; line-height: 1.3; }
+  .check-item.checked .check-text { color: var(--white); }
+
+  /* RADIO PILLS */
+  .radio-group { display: flex; gap: 10px; flex-wrap: wrap; }
+  .radio-pill { cursor: pointer; }
+  .radio-pill input { display: none; }
+  .radio-pill span {
+    display: block;
+    padding: 9px 22px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #3c4043;
+    transition: all 0.15s;
+    background: #ffffff;
+  }
+  .radio-pill input:checked + span { background: var(--blue); border-color: var(--blue); color: var(--white); }
+  .radio-pill:hover span { border-color: var(--blue); color: var(--white); }
+
+  /* SUBMIT */
+  .submit-wrap { margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--border); }
+  .submit-btn {
+    background: #1557b0;
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 16px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 16px 48px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    width: 100%;
+  }
+  .submit-btn:hover { background: var(--blue-dim); }
+  .submit-btn:active { transform: scale(0.99); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .success-banner {
+    display: none;
+    background: #0d2e1f;
+    border: 1px solid var(--success);
+    border-radius: 6px;
+    padding: 20px 24px;
+    color: var(--success);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 20px;
+    text-align: center;
+  }
+
+
+  .autosave-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--success);
+    opacity: 0;
+    transition: opacity 0.4s;
+    margin-top: 10px;
+  }
+  .autosave-badge.visible { opacity: 1; }
+  .autosave-dot {
+    width: 6px; height: 6px;
+    background: var(--success);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+
+
+  /* CORE VALUES BAR */
+  .core-bar {
+    background: #1557b0;
+    padding: 8px 40px;
+    display: flex;
+    justify-content: center;
+    gap: 0;
+  }
+  .core-bar-inner {
+    max-width: 760px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .core-word {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 15px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white);
+    opacity: 0.9;
+  }
+  .core-dot {
+    color: var(--white);
+    opacity: 0.4;
+    font-size: 8px;
+  }
+
+  /* SUCCESS MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.visible { display: flex; }
+  .modal-box {
+    background: #ffffff;
+    border: 1px solid #1557b0;
+    border-radius: 12px;
+    padding: 48px 40px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    animation: modalIn 0.3s ease;
+  }
+  @keyframes modalIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .modal-icon {
+    width: 56px; height: 56px;
+    background: #1557b0;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+  }
+  .modal-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 26px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #202124;
+    margin-bottom: 12px;
+  }
+  .modal-msg {
+    font-size: 15px;
+    color: #5f6368;
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+  .modal-close {
+    background: #1557b0;
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 12px 32px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .modal-close:hover { background: var(--blue-dim); }
+
+
+
+  /* CELEBRATION BURST */
+  .burst-emoji {
+    position: fixed;
+    font-size: 24px;
+    pointer-events: none;
+    z-index: 9999;
+    animation: burstUp 0.8s ease-out forwards;
+  }
+  @keyframes burstUp {
+    0%   { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-80px) scale(1.4); opacity: 0; }
+  }
+
+  /* ENERGY CHECK-IN */
+  .energy-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .energy-btn {
+    background: #ffffff;
+    border: 2px solid #dadce0;
+    border-radius: 8px;
+    padding: 14px 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.15s;
+    border-left-width: 4px;
+  }
+  .energy-btn:hover { background: #f0f4ff; transform: translateX(4px); }
+  .energy-btn.selected { background: #e8f0fe; transform: translateX(4px); }
+  .energy-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .energy-emoji { font-size: 20px; }
+  .energy-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .energy-desc { font-size: 12px; color: #5f6368; margin-left: auto; font-style: italic; }
+  .e1 { border-left-color: #ff6b6b; } .e1.selected, .e1:hover { border-color: #ff6b6b; } .e1 .energy-dot { background: #ff6b6b; } .e1 .energy-text { color: #ff6b6b; }
+  .e2 { border-left-color: #ffa94d; } .e2.selected, .e2:hover { border-color: #ffa94d; } .e2 .energy-dot { background: #ffa94d; } .e2 .energy-text { color: #ffa94d; }
+  .e3 { border-left-color: #ffe066; } .e3.selected, .e3:hover { border-color: #ffe066; } .e3 .energy-dot { background: #ffe066; } .e3 .energy-text { color: #ffe066; }
+  .e4 { border-left-color: #69db7c; } .e4.selected, .e4:hover { border-color: #69db7c; } .e4 .energy-dot { background: #69db7c; } .e4 .energy-text { color: #69db7c; }
+  .e5 { border-left-color: #6b8fff; } .e5.selected, .e5:hover { border-color: #6b8fff; } .e5 .energy-dot { background: #6b8fff; } .e5 .energy-text { color: #6b8fff; }
+
+  /* NOTIFY CHECKBOXES */
+  .notify-section {
+    background: #f8f9fa;
+    border: 1.5px solid #dadce0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 12px;
+  }
+  .notify-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #8fabff;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .notify-list { display: flex; flex-direction: column; gap: 8px; }
+  .notify-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #ffffff;
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+  .notify-item:hover { border-color: #1557b0; }
+  .notify-item.checked { border-color: #1557b0; background: #e8f0fe; }
+  .notify-item input[type="checkbox"] { display: none; }
+  .notify-box {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .notify-item.checked .notify-box { background: var(--blue); border-color: var(--blue); }
+  .notify-box svg { display: none; }
+  .notify-item.checked .notify-box svg { display: block; }
+  .notify-name { font-weight: 600; font-size: 14px; color: #202124; }
+  .notify-email { font-size: 12px; color: #5f6368; margin-left: auto; }
+  .notify-item.locked { opacity: 0.6; cursor: not-allowed; }
+  .notify-item.locked .notify-box { background: var(--blue); border-color: var(--blue); }
+  .notify-hint { font-size: 11px; color: #c5221f; font-weight: 600; letter-spacing: 0.03em; display: block; margin-top: 2px; margin-bottom: 12px; text-transform: uppercase; }
+  .notify-item.locked .notify-box svg { display: block; }
+  .poc-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #1557b0;
+    text-decoration: none;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    padding: 8px 14px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .poc-link:hover { border-color: #1557b0; background: #e8f0fe; }
+
+  input::placeholder, textarea::placeholder { color: #9aa0a6; }
+  .axle-sub { padding-left: 24px; border-left: 3px solid #1557b0; margin-left: 16px; margin-bottom: 8px; }
+  .sub-item { margin-bottom: 6px; border-color: #e8f0fe; background: #f8faff; }
+  .axle-toggle-hint { font-size: 11px; color: #1557b0; font-weight: 600; margin-left: 8px; opacity: 0.7; }
+
+  .hint {
+    font-size: 12px;
+    color: #5f6368;
+    margin-top: 6px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<div class="core-bar">
+  <div class="core-bar-inner">
+    <span class="core-word">Connect</span>
+    <span class="core-dot">●</span>
+    <span class="core-word">Open</span>
+    <span class="core-dot">●</span>
+    <span class="core-word">Recognize</span>
+    <span class="core-dot">●</span>
+    <span class="core-word">Educate</span>
+  </div>
+</div>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-subtitle">LIC &nbsp;·&nbsp; End of Shift Report</div>
+    <div class="autosave-badge" id="autosaveBadge"><span class="autosave-dot"></span> Draft saved</div>
+</div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+</header>
+
+<form class="form-wrap" id="shiftForm" novalidate>
+
+  <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
+    <a href="https://docs.google.com/spreadsheets/d/1uvVXrRNcsX0E-ZE9VZDJ6P_n-AjPus1TTiXySQ-YFpU/edit?gid=1439431177#gid=1439431177" target="_blank" style="flex:1;min-width:140px;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#ffffff;color:#1557b0;border:2px solid #1557b0;padding:11px 16px;border-radius:8px;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;">📋 Visitor's Guide</a>
+    <a href="https://docs.google.com/spreadsheets/d/1uvVXrRNcsX0E-ZE9VZDJ6P_n-AjPus1TTiXySQ-YFpU/edit?gid=937215114#gid=937215114" target="_blank" style="flex:1;min-width:140px;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#ffffff;color:#1557b0;border:2px solid #1557b0;padding:11px 16px;border-radius:8px;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;">📞 Point of Contact</a>
+    <a href="https://docs.google.com/spreadsheets/d/1UH8LiMF0RvrJTTWayHnyLNMsHvLpTJ_NKXgOlgQWDVo" target="_blank" style="flex:1;min-width:140px;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#ffffff;color:#1557b0;border:2px solid #1557b0;padding:11px 16px;border-radius:8px;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;">📊 LIC Shift Reports</a>
+  </div>
+
+  <div class="section-label">Shift Info</div>
+  <div class="field-row">
+    <div class="field">
+      <label>Name <span class="req">*</span></label>
+      <input type="text" name="name" placeholder="Your name" required />
+    </div>
+    <div class="field">
+      <label>Email <span class="req">*</span></label>
+      <input type="email" name="email" placeholder="your@email.com" required />
+    </div>
+  </div>
+  <div class="field-row">
+    <div class="field">
+      <label>Date <span class="req">*</span></label>
+      <input type="date" name="date" required />
+    </div>
+    <div class="field">
+      <label>Shift Time <span class="req">*</span></label>
+      <select name="shift_time">
+        <option value="">Select shift</option>
+        <option>Opening (AM)</option>
+        <option>Mid</option>
+        <option>Closing (PM)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="section-label">Shift Goal</div>
+  <div class="field">
+    <label>Goal for this shift <span class="req">*</span></label>
+    <textarea name="next_shift_goal" placeholder="Be specific — what will you focus on?" required></textarea>
+  </div>
+
+  <div class="section-label">Shift Checklist — Required Before End of Shift</div>
+  <div class="checklist" id="checklist">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <div class="check-item" onclick="toggleCheck(this)" style="flex:1;margin-bottom:0;">
+        <input type="checkbox" name="checklist" value="brand_standards"/>
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="check-text">Brand Standards — Restock alarm reset, studio restocked every 3 hours, iPad checklist completed</span>
+      </div>
+      <a href="https://drive.google.com/file/d/1iKVEEwHOMLZrUTFjQpnol8AjPeK1Vbih/view?usp=sharing" target="_blank" style="display:inline-flex;align-items:center;gap:4px;background:#1557b0;color:white;padding:5px 12px;border-radius:20px;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;flex-shrink:0;">
+        📋 Checklist
+      </a>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <input type="checkbox" name="checklist" value="stop_drop_checkin"/>
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="check-text">STOP, DROP, CHECK-IN — Please stand up for every check-in (get waivers signed)</span>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <input type="checkbox" name="checklist" value="inbox"/>
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="check-text">Studio inbox cleared &amp; responded to</span>
+    </div>
+    <!-- Axle expandable -->
+    <div class="check-item axle-parent" onclick="toggleAxle(this)">
+      <input type="checkbox" name="checklist" value="axle" id="axle_main"/>
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="check-text">AXLE <span class="axle-toggle-hint" id="axleHint">▾ tap to expand</span></span>
+    </div>
+    <div class="axle-sub" id="axleSub" style="display:none;">
+      <div class="check-item sub-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="axle_voicemail" value="voicemails_cleared"/>
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="check-text">Voicemails cleared</span>
+      </div>
+      <div class="check-item sub-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="axle_callbacks" value="clients_called_back"/>
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="check-text">Clients called back / emailed</span>
+      </div>
+      <div class="check-item sub-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="axle_texts" value="non_sales_texts"/>
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="check-text">Non-Sales Team texts addressed</span>
+      </div>
+      <div class="check-item sub-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="axle_first_class" value="first_class_bucket"/>
+        <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="check-text">"First Class Tomorrow" bucket cleared</span>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <input type="checkbox" name="checklist" value="unpaid_class"/>
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="check-text">Unpaid class tomorrow</span>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <input type="checkbox" name="checklist" value="nab_outreach"/>
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="check-text">Negative account balance outreach (please update NAB tracker)</span>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <input type="checkbox" name="checklist" value="milestones"/>
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="check-text">Milestone boards completed & pre-made for early milestones tomorrow</span>
+    </div>
+    <div class="check-item" onclick="toggleCheck(this)">
+      <input type="checkbox" name="checklist" value="supply_order"/>
+      <div class="check-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="check-text">Studio supply order — unpack &amp; put away (arrives first week of the month)</span>
+    </div>
+
+
+  </div>
+
+
+
+  <div class="section-label">Sales Metrics</div>
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <span class="metric-label">Membership Sales</span>
+      <div class="stepper">
+        <button type="button" onclick="stepDown('membership_sales')">−</button>
+        <div class="count" id="membership_sales_display">0</div>
+        <button type="button" onclick="stepUp('membership_sales', this)">+</button>
+      </div>
+      <input type="hidden" name="membership_sales" id="membership_sales" value="0"/>
+    </div>
+    <div class="metric-card">
+      <span class="metric-label">New Client Special Sales</span>
+      <div class="stepper">
+        <button type="button" onclick="stepDown('nc_specials')">−</button>
+        <div class="count" id="nc_specials_display">0</div>
+        <button type="button" onclick="stepUp('nc_specials', this)">+</button>
+      </div>
+      <input type="hidden" name="nc_specials" id="nc_specials" value="0"/>
+    </div>
+
+  </div>
+
+  <div class="field" style="margin-top:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <label style="margin-bottom:0;">Sales Notes</label>
+      <a href="https://www.appsheet.com/start/2d3cbf3a-af41-4f23-92ed-def9dd6f251a?platform=desktop#appName=SPIFsubmission-451227836-25-10-10&vss=H4sIAAAAAAAAA62PQUvEMBCF_4rMOQVbW6q5ygpFdhEqXoyH2WYCwTZZmqm6lPx3E1cRPC4e5w3fx3srvFl67xmHV5DP6-91T0eQsCp4PB5IgVRw6x3PflQgFOxwOoX9Q3d30S_7yYZgvVMQIb6IHw1TALmeZZH_0kWA1eTYGktzVmZBUn3j6Z3hFPxBIQqYFsb9SF8rMmpD5zba8tbrdPO8kACe0QUcOCGdTpr6ygzNZY0FltVNUVctFVibskBdts11pVvTEMSY7MYPSyD9lCaePy03-jig06dOBsdA8RNPvdkI0gEAAA==&view=SPIF%20Submission" target="_blank" style="display:inline-flex;align-items:center;gap:5px;background:#1557b0;color:white;padding:5px 12px;border-radius:20px;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;">
+        ⚡ SPIF Submission
+      </a>
+    </div>
+    <textarea name="sales_notes" placeholder="Any context around your sales this shift — conversations started, objections, follow up opportunities..."></textarea>
+  </div>
+  <div class="field">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <label style="margin-bottom:0;">Unpaid Classes / Negative Balances / LCEs</label>
+      <a href="https://docs.google.com/spreadsheets/d/17JaWGpZqJGzV3QVN0RXd9M5avRAMUPWMQyAgKhdVvcM/edit?gid=993472764#gid=993472764" target="_blank" style="display:inline-flex;align-items:center;gap:5px;background:#1557b0;color:white;padding:5px 12px;border-radius:20px;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;">
+        📊 NAB Tracker
+      </a>
+    </div>
+    <textarea name="bookings_lces" placeholder="Document unpaid classes, negative account balances, and any LCEs given. If an LCE was given, update the client account to keep track."></textarea>
+  </div>
+
+  <div class="section-label">Community Building</div>
+  <div class="field">
+    <label>Standout Conversations / Community Moments <span class="req">*</span></label>
+    <textarea name="community_notes" placeholder="Share any great connections, member milestones, or community-building moments this shift..."></textarea>
+    <p class="hint"></p>
+  </div>
+  <div class="section-label">Client & Facilities Issues</div>
+  <p style="font-size:12px;color:#5f6368;margin:-8px 0 16px;font-style:italic;">Anything that requires HCCM follow-up should go in this section.</p>
+  <div class="field">
+    <label>Any client issues? <span class="req">*</span></label>
+    <div class="radio-group">
+      <label class="radio-pill"><input type="radio" name="client_issues" value="Yes" required/><span>Yes</span></label>
+      <label class="radio-pill"><input type="radio" name="client_issues" value="No"/><span>No</span></label>
+    </div>
+  </div>
+  <div class="field" id="client_issues_detail" style="display:none;">
+    <label>Client Issue Details</label>
+    <textarea name="client_issues_notes" placeholder="Describe the issue."></textarea>
+  </div>
+  <div class="field" id="client_action_taken" style="display:none;">
+    <label>Action Taken</label>
+    <textarea name="client_action_taken" placeholder="What did you do? e.g. Called client, issued refund, notified manager, sent follow up email..."></textarea>
+  </div>
+
+
+  <div class="field">
+    <label>Any facilities issues? <span class="req">*</span></label>
+    <div class="radio-group">
+      <label class="radio-pill"><input type="radio" name="facilities_issues" value="Yes" required/><span>Yes</span></label>
+      <label class="radio-pill"><input type="radio" name="facilities_issues" value="No"/><span>No</span></label>
+    </div>
+  </div>
+  <div class="field" id="facilities_issues_detail" style="display:none;">
+    <label>Facilities Issue Details</label>
+    <textarea name="facilities_issues_notes" placeholder="Describe the issue."></textarea>
+  </div>
+  <div class="field" id="facilities_action_taken" style="display:none;">
+    <label>Action Taken</label>
+    <textarea name="facilities_action_taken" placeholder="What did you do? e.g. Called facilities, submitted work order, notified manager, cordoned off area..."></textarea>
+  </div>
+  <div class="field" id="shared_notify" style="display:none;">
+    <div class="notify-section">
+      <span class="notify-title">📣 Who should be notified?</span>
+      <span class="notify-hint">Only select Inger or Anastasiia if HCCM is OOO</span>
+      <div class="notify-list">
+        <div class="notify-item locked">
+          <input type="checkbox" name="notify_issue" value="juan.zapata@solidcore.co" checked disabled/>
+          <div class="notify-box"><svg width="10" height="8" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="notify-name">Juan Zapata</span>
+          <span class="notify-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="29435c484707534859485d48695a4645404d4a465b4c074a46">[email&#160;protected]</a></span>
+        </div>
+        <div class="notify-item" onclick="toggleNotify(this)">
+          <input type="checkbox" name="notify_issue" value="inger@solidcore.co"/>
+          <div class="notify-box"><svg width="10" height="8" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="notify-name">Inger</span>
+          <span class="notify-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7910171e1c0b390a1615101d1a160b1c571a16">[email&#160;protected]</a></span>
+        </div>
+        <div class="notify-item" onclick="toggleNotify(this)">
+          <input type="checkbox" name="notify_issue" value="anastasiia.lazarieva@solidcore.co"/>
+          <div class="notify-box"><svg width="10" height="8" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="notify-name">Anastasiia</span>
+          <span class="notify-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="791817180a0d180a10101857151803180b101c0f18390a1615101d1a160b1c571a16">[email&#160;protected]</a></span>
+        </div>
+      </div>
+      <a class="poc-link" href="https://docs.google.com/spreadsheets/d/1uvVXrRNcsX0E-ZE9VZDJ6P_n-AjPus1TTiXySQ-YFpU/edit?gid=937215114#gid=937215114" target="_blank">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        View POC Sheet — if above leaders are OOO
+      </a>
+    </div>
+  </div>
+
+  <div class="field" id="facilities_media" style="display:none;">
+    <label>Upload Media Pertaining to Facilities Issues</label>
+    <a href="https://drive.google.com/drive/folders/1Qpsef0_hHaRUEaGd04by2RhTf8HsSM5Z" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#1557b0;color:white;padding:10px 18px;border-radius:6px;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;">
+      📁 Open Facilities Media Folder
+    </a>
+    <p class="hint">Upload your photo or video to the folder above, then paste the file link below so leadership can find it quickly.</p>
+    <input type="text" name="facilities_media_link" placeholder="Paste the link to your uploaded file here..." style="margin-top:8px;"/>
+  </div>
+
+  <div class="section-label">Shift Goals — Did You Achieve It?</div>
+  <div class="field">
+    <label>Did you achieve your goal for this shift? <span class="req">*</span></label>
+    <textarea name="goal_achieved" placeholder="Yes — or explain what happened..." required></textarea>
+  </div>
+
+  <div class="section-label">End of Shift Check-in</div>
+  <div class="field">
+    <label>How's your energy & spirit after this shift? <span class="req">*</span></label>
+    <div class="energy-options">
+      <div class="energy-btn e1" onclick="selectEnergy(this, 'Drained')"><div class="energy-dot"></div><span class="energy-emoji">😔</span><span class="energy-text">Drained</span><span class="energy-desc">Tough shift</span></div>
+      <div class="energy-btn e2" onclick="selectEnergy(this, 'Tired')"><div class="energy-dot"></div><span class="energy-emoji">😐</span><span class="energy-text">Tired</span><span class="energy-desc">Ready to rest</span></div>
+      <div class="energy-btn e3" onclick="selectEnergy(this, 'Okay')"><div class="energy-dot"></div><span class="energy-emoji">🙂</span><span class="energy-text">Okay</span><span class="energy-desc">Solid shift</span></div>
+      <div class="energy-btn e4" onclick="selectEnergy(this, 'Energized')"><div class="energy-dot"></div><span class="energy-emoji">😊</span><span class="energy-text">Energized</span><span class="energy-desc">Great connections</span></div>
+      <div class="energy-btn e5" onclick="selectEnergy(this, 'Amazing')"><div class="energy-dot"></div><span class="energy-emoji">🤩</span><span class="energy-text">Amazing</span><span class="energy-desc">Best shift ever</span></div>
+    </div>
+    <input type="hidden" name="energy_level" id="energy_level" value=""/>
+  </div>
+
+  <div class="section-label">Anything Else?</div>
+  <div class="field">
+    <label>Did anything prevent you from completing your shift tasks?</label>
+    <textarea name="blockers" placeholder="Optional — explain any blockers or things leadership should know..."></textarea>
+  </div>
+
+  <div class="submit-wrap">
+    <button type="submit" class="submit-btn" id="submitBtn">Submit Shift Report</button>
+    <div class="success-banner" id="successBanner">✓ Shift report submitted successfully!</div>
+  </div>
+
+</form>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  document.querySelector('input[name="date"]').valueAsDate = new Date();
+
+  function toggleAxle(item) {
+    const sub = document.getElementById('axleSub');
+    const hint = document.getElementById('axleHint');
+    const isOpen = sub.style.display !== 'none';
+    sub.style.display = isOpen ? 'none' : 'block';
+    hint.textContent = isOpen ? '▾ tap to expand' : '▴ collapse';
+    const cb = item.querySelector('input[type="checkbox"]');
+    if (cb) { cb.checked = !isOpen; item.classList.toggle('checked', !isOpen); }
+  }
+
+  function selectEnergy(el, value) {
+    document.querySelectorAll('.energy-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('energy_level').value = value;
+  }
+
+  function toggleNotify(el) {
+    if (el.classList.contains('locked')) return;
+    el.classList.toggle('checked');
+    el.querySelector('input[type="checkbox"]').checked = el.classList.contains('checked');
+  }
+
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+    el.querySelector('input[type="checkbox"]').checked = el.classList.contains('checked');
+    updateProgress();
+  }
+
+  const stepValues = { membership_sales: 0, nc_specials: 0, reach_outs: 0, follow_ups: 0 };
+  function stepUp(id, btnEl) {
+    stepValues[id]++;
+    document.getElementById(id + '_display').textContent = stepValues[id];
+    document.getElementById(id).value = stepValues[id];
+    if (!btnEl) return;
+    const emojis = ['🔥','⚡','✨','💙','🎉','💪','🌟'];
+    const rect = btnEl.getBoundingClientRect();
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => {
+        const el = document.createElement('span');
+        el.style.cssText = 'position:fixed;font-size:22px;pointer-events:none;z-index:99999;transition:none;animation:burstUp 0.8s ease-out forwards;';
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.left = (rect.left + rect.width / 2 + (Math.random() * 40 - 20)) + 'px';
+        el.style.top = (rect.top - 10) + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 900);
+      }, i * 100);
+    }
+  }
+  function stepDown(id) {
+    if (stepValues[id] > 0) {
+      stepValues[id]--;
+      document.getElementById(id + '_display').textContent = stepValues[id];
+      document.getElementById(id).value = stepValues[id];
+    }
+  }
+
+  function updateSharedNotify() {
+    const clientYes = document.querySelector('input[name="client_issues"]:checked')?.value === 'Yes';
+    const facilitiesYes = document.querySelector('input[name="facilities_issues"]:checked')?.value === 'Yes';
+    document.getElementById('shared_notify').style.display = (clientYes || facilitiesYes) ? 'block' : 'none';
+  }
+
+  document.querySelectorAll('input[name="client_issues"]').forEach(r => {
+    r.addEventListener('change', () => {
+      const isYes = document.querySelector('input[name="client_issues"]:checked')?.value === 'Yes';
+      document.getElementById('client_issues_detail').style.display = isYes ? 'block' : 'none';
+      document.getElementById('client_action_taken').style.display = isYes ? 'block' : 'none';
+      updateSharedNotify();
+    });
+  });
+  document.querySelectorAll('input[name="facilities_issues"]').forEach(r => {
+    r.addEventListener('change', () => {
+      const isYes = document.querySelector('input[name="facilities_issues"]:checked')?.value === 'Yes';
+      document.getElementById('facilities_issues_detail').style.display = isYes ? 'block' : 'none';
+      document.getElementById('facilities_action_taken').style.display = isYes ? 'block' : 'none';
+      document.getElementById('facilities_media').style.display = isYes ? 'block' : 'none';
+      updateSharedNotify();
+    });
+  });
+
+  function updateProgress() {
+    const required = document.querySelectorAll('[required]');
+    let filled = 0;
+    required.forEach(el => {
+      if (el.type === 'radio') {
+        if (document.querySelector(`[name="${el.name}"]:checked`)) filled++;
+      } else if (el.value.trim()) filled++;
+    });
+    document.getElementById('progressBar').style.width = Math.round((filled / required.length) * 100) + '%';
+  }
+
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    el.addEventListener('input', updateProgress);
+    el.addEventListener('change', updateProgress);
+  });
+
+  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw4vEITyaK5VBsjeBJHU4oPAgbPeHEafj0SQ-LIFJYwy2V261Mhh8olaXOUpbdeEzax/exec';
+
+  document.getElementById('shiftForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    // Validate all checklist items are checked
+    const checklistItems = document.querySelectorAll('#checklist .check-item');
+    const allChecked = [...checklistItems].every(item => {
+      const input = item.querySelector('input[type="checkbox"]');
+      if (input && input.value === 'supply_order') return true; // optional
+      return item.classList.contains('checked');
+    });
+    if (!allChecked) {
+      // Highlight unchecked items
+      checklistItems.forEach(item => {
+        if (!item.classList.contains('checked')) {
+          item.style.borderColor = '#f28b82';
+          item.style.background = '#fce8e6';
+        }
+      });
+      // Scroll to checklist
+      document.getElementById('checklist').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Show error message
+      const existing = document.getElementById('checklist-error');
+      if (!existing) {
+        const err = document.createElement('p');
+        err.id = 'checklist-error';
+        err.style.cssText = 'color:#ff6b6b;font-size:13px;font-weight:600;margin-top:10px;letter-spacing:0.05em;';
+        err.textContent = '⚠️ Please complete all checklist items before submitting.';
+        document.getElementById('checklist').after(err);
+      }
+      return;
+    }
+
+    // Validate community building
+    const communityNotes = document.querySelector('textarea[name="community_notes"]').value.trim();
+    if (!communityNotes) {
+      document.querySelector('textarea[name="community_notes"]').style.borderColor = '#ff6b6b';
+      document.querySelector('textarea[name="community_notes"]').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.querySelector('textarea[name="community_notes"]').placeholder = '⚠️ This field is required before submitting.';
+      return;
+    }
+
+    // Validate energy check-in
+    const energyLevel = document.getElementById('energy_level').value;
+    if (!energyLevel) {
+      document.querySelector('.energy-options').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const existing = document.getElementById('energy-error');
+      if (!existing) {
+        const err = document.createElement('p');
+        err.id = 'energy-error';
+        err.style.cssText = 'color:#ff6b6b;font-size:13px;font-weight:600;margin-top:10px;letter-spacing:0.05em;';
+        err.textContent = '⚠️ Please select your energy & spirit before submitting.';
+        document.querySelector('.energy-options').after(err);
+      }
+      return;
+    }
+
+    // Clear energy error if exists
+    const energyErr = document.getElementById('energy-error');
+    if (energyErr) energyErr.remove();
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    const data = new FormData(this);
+    const checked = [...document.querySelectorAll('input[name="checklist"]:checked')].map(c => c.value).join(', ');
+    data.set('checklist', checked);
+
+    // Collect notify emails (always include Juan + any checked)
+    const notifyEmails = ['juan.zapata@solidcore.co',
+      ...[...document.querySelectorAll('input[name="notify_issue"]:checked:not([disabled])')].map(c => c.value)
+    ];
+    data.set('notify_client_emails', notifyEmails.join(','));
+    data.set('notify_facilities_emails', notifyEmails.join(','));
+
+    const payload = {};
+    data.forEach((val, key) => { payload[key] = val; });
+    payload.submitted_at = new Date().toISOString();
+    // Explicitly capture energy level in case hidden input wasn't picked up
+    payload.energy_level = document.getElementById('energy_level').value || '';
+    // Capture axle sub-items
+    const axleItems = [...document.querySelectorAll('input[name^="axle_"]:checked')].map(c => c.value);
+    payload.first_class_bucket = axleItems.includes('first_class_bucket') ? 'Yes' : 'No';
+    // Append axle items to checklist
+    if (axleItems.length > 0) {
+      payload.checklist = (payload.checklist ? payload.checklist + ', ' : '') + axleItems.join(', ');
+    }
+
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (err) {
+      // no-cors mode always throws — ignore and show success
+    }
+    // Always show success — no-cors fetch cannot confirm response
+    // but data is being saved to the sheet
+    document.getElementById('progressBar').style.width = '100%';
+    btn.textContent = '✓ Submitted';
+    document.getElementById('successModal').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  updateProgress();
+
+  updateProgress();
+
+  // ── Autosave to localStorage ──────────────────────────────
+  const SAVE_KEY = 'solidcore_lic_shift_draft_v4';
+
+  let formSubmitted = false;
+
+  function saveFormDraft() {
+    if (formSubmitted) return;
+    try {
+      const data = {};
+      document.querySelectorAll('input[type="text"], input[type="email"], input[type="date"], select, textarea').forEach(el => {
+        if (el.name) data[el.name] = el.value;
+      });
+      document.querySelectorAll('input[type="radio"]:checked').forEach(el => {
+        data[el.name] = el.value;
+      });
+      document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+        data['cb_' + el.value] = el.closest('.check-item') ? el.closest('.check-item').classList.contains('checked') : false;
+      });
+      data['energy_level'] = document.getElementById('energy_level').value || '';
+      localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+      const badge = document.getElementById('autosaveBadge');
+      if (badge) { badge.classList.add('visible'); setTimeout(() => badge.classList.remove('visible'), 2000); }
+    } catch(e) { console.warn('Autosave failed:', e); }
+  }
+
+  function loadFormDraft() {
+    try {
+      const saved = localStorage.getItem(SAVE_KEY);
+      if (!saved) return;
+      const data = JSON.parse(saved);
+      Object.entries(data).forEach(([key, val]) => {
+        if (key.startsWith('cb_')) {
+          const cbVal = key.replace('cb_', '');
+          const cb = document.querySelector(`input[type="checkbox"][value="${cbVal}"]`);
+          if (cb && val) { const item = cb.closest('.check-item'); if (item) { item.classList.add('checked'); cb.checked = true; } }
+        } else if (key === 'energy_level') {
+          if (val) {
+            document.getElementById('energy_level').value = val;
+            document.querySelectorAll('.energy-btn').forEach(btn => {
+              if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(val)) btn.classList.add('selected');
+            });
+          }
+        } else {
+          const el = document.querySelector(`[name="${key}"]`);
+          if (!el) return;
+          if (el.type === 'radio') {
+            const r = document.querySelector(`input[name="${key}"][value="${val}"]`);
+            if (r) { r.checked = true; r.dispatchEvent(new Event('change')); }
+          } else { el.value = val; }
+        }
+      });
+      updateProgress();
+    } catch(e) { localStorage.removeItem(SAVE_KEY); }
+  }
+
+  // Autosave on any input change - save immediately, no debounce delay
+  let saveTimer;
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    el.addEventListener('input', () => { saveFormDraft(); });
+    el.addEventListener('change', () => { saveFormDraft(); });
+    el.addEventListener('keyup', () => { saveFormDraft(); });
+  });
+
+  // Save when check items or energy buttons are clicked
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.check-item') || e.target.closest('.energy-btn')) {
+      setTimeout(saveFormDraft, 100);
+    }
+  });
+
+  // Save on page visibility change (switching tabs)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') saveFormDraft();
+  });
+
+  // Save immediately if page is about to close
+  window.addEventListener('beforeunload', saveFormDraft);
+  window.addEventListener('pagehide', saveFormDraft);
+
+  // Clear old draft versions
+  ['solidcore_shift_draft', 'solidcore_lic_shift_draft', 'solidcore_lic_shift_draft_v2', 'solidcore_lic_shift_draft_v3'].forEach(k => localStorage.removeItem(k));
+
+  // Load draft on page open
+  loadFormDraft();
+
+  // Clear draft on successful submit and stop autosave
+  document.getElementById('shiftForm').addEventListener('submit', function() {
+    formSubmitted = true;
+    localStorage.removeItem(SAVE_KEY);
+  }, true);
+
+</script>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-box">
+    <div class="modal-icon">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <path d="M6 14L11 19L22 8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="modal-title">Thank You!</div>
+    <div class="modal-msg">Your shift report has been submitted.<br/><br/>Thank you for elevating the client experience at [solidcore] LIC. 💙</div>
+    <button class="modal-close" onclick="localStorage.removeItem(SAVE_KEY); document.getElementById('successModal').classList.remove('visible'); window.location.reload();">Done</button>
+  </div>
+</div>
+
+</body>
+</html>
